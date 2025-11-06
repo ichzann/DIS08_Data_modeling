@@ -5,21 +5,15 @@ class FreiePresseSpider(scrapy.Spider):
     name = 'freiepresse'
     allowed_domains = ['freiepresse.de']
     
-    # Starte bei Seite 0. Die Paginierung wird im parse-Schritt angepasst.
     start_urls = ['https://www.freiepresse.de/archiv?page=0']
     
-    # Zähler für die Paginierung
     page_number = 0
 
     def parse(self, response):
         
-        # 🎯 Selektor für den Einzel-Artikel-Container (Der äußere <a>-Tag)
-        # Dieser Tag hat die URL im href-Attribut.
-        # Im Screenshot sichtbar: <a class="article-preview card article-preview--desktop ...">
         artikel_container = response.css('a.article-preview.card') 
         
         if not artikel_container:
-            # STOPP: Wenn auf der aktuellen Seite keine Artikel mehr gefunden werden, beende den Crawl.
             self.logger.info(f"Keine Artikel mehr auf Seite {self.page_number} gefunden. Beende Crawl.")
             return
 
